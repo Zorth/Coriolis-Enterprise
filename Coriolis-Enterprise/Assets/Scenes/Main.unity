@@ -218,6 +218,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b2740d03023725419e331fb0185a53b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  selectionColor: {r: 0.5518868, g: 1, b: 0.7429428, a: 0.2}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -311,6 +312,38 @@ Transform:
   m_Children: []
   m_Father: {fileID: 498485895}
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!1 &794063335 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 374194551130433107, guid: 0565b32727bd57e46b9ff9d1522cdf54, type: 3}
+  m_PrefabInstance: {fileID: 5054569141972189871}
+  m_PrefabAsset: {fileID: 0}
+--- !u!54 &794063340
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 794063335}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -441,7 +474,7 @@ GameObject:
   - component: {fileID: 1946754629}
   - component: {fileID: 1946754628}
   - component: {fileID: 1946754627}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Plane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -549,6 +582,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Cube
       objectReference: {fileID: 0}
+    - target: {fileID: 374194551130433107, guid: 0565b32727bd57e46b9ff9d1522cdf54, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 946640152852527366, guid: 0565b32727bd57e46b9ff9d1522cdf54, type: 3}
+      propertyPath: m_IncludeLayers.m_Bits
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 6643588002604713733, guid: 0565b32727bd57e46b9ff9d1522cdf54, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -592,7 +633,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 374194551130433107, guid: 0565b32727bd57e46b9ff9d1522cdf54, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 794063340}
   m_SourcePrefab: {fileID: 100100000, guid: 0565b32727bd57e46b9ff9d1522cdf54, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

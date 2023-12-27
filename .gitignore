@@ -12,6 +12,7 @@
 sysinfo.txt
 # Unity3D generated meta files
 *.pidb.meta
+[Cc]oriolis-[Ee]nterprise/[Uu]ser[Ss]ettings/
 
 ###
 # VS/MD solution and project files
@@ -27,6 +28,8 @@ sysinfo.txt
 *.userprefs
 *.pidb
 .DS_Store
+[Cc]oriolis-[Ee]nterprise/.vs/
+.vsconfig
 
 ###
 # OS generated
