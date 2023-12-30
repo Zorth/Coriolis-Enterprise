@@ -5,7 +5,7 @@ using UnityEngine;
 public class CameraController : MonoBehaviour
 {
     public float slowSpeed, slowRotateSpeed, movementTime, fastMultiplier, minHeight, maxHeight, maxDepth, minDepth;
-    public Transform cameraTransform;
+    private Transform cameraTransform;
 
     private float cameraSpeed, cameraRotateSpeed, cameraTime, zoomLevel, newZoom;
 
@@ -19,6 +19,7 @@ public class CameraController : MonoBehaviour
         newPos = transform.position;
         newZoom = 0.5f;
         newRot = Quaternion.identity;
+        cameraTransform = Camera.main.transform;
     }
 
     // Update is called once per frame

@@ -49,12 +49,12 @@ public class EventSystem : MonoBehaviour
         if (Input.GetButtonDown("Select"))
             clickPos = Input.mousePosition;
 
-        if (Input.GetAxis("Select") > 0.5f && (clickPos - Input.mousePosition).magnitude > minDragDist)
+        if (Input.GetButton("Select") && (clickPos - Input.mousePosition).magnitude > minDragDist)
             dragSelect = true;
 
         if (Input.GetButtonUp("Select"))
         {
-            if (Input.GetAxis("Fast") < 0.5f)
+            if (!Input.GetButton("Fast") && !Input.GetButton("Deselect"))
                 deselectAll();
 
             if (dragSelect)
@@ -110,7 +110,10 @@ public class EventSystem : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        addSelected(other.gameObject);
+        if (Input.GetButton("Deselect"))
+            deselect(other.gameObject.GetInstanceID());
+        else
+            addSelected(other.gameObject);
 
     }
 
@@ -120,7 +123,11 @@ public class EventSystem : MonoBehaviour
 
         if (Physics.Raycast(ray, out selectHit, 1000.0f, LayerMask.GetMask("Units")))
         {
-            addSelected(selectHit.transform.gameObject);
+            if (Input.GetButton("Deselect"))
+                deselect(selectHit.transform.gameObject.GetInstanceID());
+            else
+                addSelected(selectHit.transform.gameObject);
+
         }
     }
 
@@ -150,8 +157,11 @@ public class EventSystem : MonoBehaviour
 
     public void deselect(int id)
     {
-        Destroy(selectedGOs[id].GetComponent<SelectionComponent>());
-        selectedGOs.Remove(id);
+        if (selectedGOs.ContainsKey(id))
+        {
+            Destroy(selectedGOs[id].GetComponent<SelectionComponent>());
+            selectedGOs.Remove(id);
+        }
     }
 
     public void deselectAll()
