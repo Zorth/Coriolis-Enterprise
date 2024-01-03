@@ -15,6 +15,7 @@
 sysinfo.txt
 # Unity3D generated meta files
 *.pidb.meta
+[Uu]ser[Ss]ettings/
 
 ###
 # VS/MD solution and project files
@@ -30,6 +31,7 @@ sysinfo.txt
 *.userprefs
 *.pidb
 .DS_Store
+.vs/
 .vs
 .vsconfig
 
