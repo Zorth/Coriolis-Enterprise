@@ -8,7 +8,9 @@ public class WorldGenerator : MonoBehaviour
     public List<Object> modules;
     static float tileRadius = 1;
     static float tileHeight = Mathf.Sqrt(3) * tileRadius;
-    static float tileWidthSpacing = tileRadius * 3/2;
+    static float tileWidthSpacing = tileRadius * 3 / 2;
+
+    private GameObject center, NE, E, SE, SW, W, NW;
 
     public int worldSize = 10;
     private Tile[][] tiles;
@@ -17,7 +19,8 @@ public class WorldGenerator : MonoBehaviour
     void Start()
     {
         InitTileArray();
-        InstantiateTiles();
+
+        SetupTiles();
     }
 
     private void InitTileArray()
@@ -31,7 +34,21 @@ public class WorldGenerator : MonoBehaviour
         }
     }
 
-    private void InstantiateTiles()
+    private void SetupTiles()
+    {
+        center = Instantiate(new GameObject(), Vector3.zero, Quaternion.identity, this.transform);
+
+        InstantiateTiles(center.transform);
+
+        NE = Instantiate(center, new Vector3(tileWidthSpacing * worldSize, 0, tileHeight * (1.5f * worldSize - 1)), Quaternion.identity, this.transform);
+        E = Instantiate(center, new Vector3(tileWidthSpacing * (1.5f * worldSize + 1), 0, -tileHeight / 2f), Quaternion.identity, this.transform);
+        SE = Instantiate(center, new Vector3(tileWidthSpacing * (worldSize - 1), 0, -tileHeight * (1.5f * worldSize - .5f)), Quaternion.identity, this.transform);
+        SW = Instantiate(center, new Vector3(tileWidthSpacing * -worldSize, 0, -tileHeight * (1.5f * worldSize - 1f)), Quaternion.identity, this.transform);
+        W = Instantiate(center, new Vector3(tileWidthSpacing * -(worldSize * 1.5f + 1), 0, tileHeight /2f), Quaternion.identity, this.transform);
+        NW = Instantiate(center, new Vector3(tileWidthSpacing * -(worldSize -1), 0, tileHeight * (1.5f * worldSize - .5f)), Quaternion.identity, this.transform);
+    }
+
+    private void InstantiateTiles(Transform parent)
     {
         for (int i = 0; i < tiles.Length; i++)
         {
@@ -41,21 +58,21 @@ public class WorldGenerator : MonoBehaviour
                 if (i == 0)
                     pos = Vector3.zero;
                 else if (j < i)
-                    pos = new Vector3((j % i) * tileWidthSpacing, 0, i * tileHeight - (j%i)*tileHeight/2);
+                    pos = new Vector3((j % i) * tileWidthSpacing, 0, i * tileHeight - (j % i) * tileHeight / 2);
                 else if (j < i * 2)
-                    pos = new Vector3(i * tileWidthSpacing, 0, i * tileHeight/2 - (j%i)*tileHeight);
+                    pos = new Vector3(i * tileWidthSpacing, 0, i * tileHeight / 2 - (j % i) * tileHeight);
                 else if (j < i * 3)
-                    pos = new Vector3(i * tileWidthSpacing - (j % i) * tileWidthSpacing, 0, -i * tileHeight/2 - (j%i)*tileHeight/2);
+                    pos = new Vector3(i * tileWidthSpacing - (j % i) * tileWidthSpacing, 0, -i * tileHeight / 2 - (j % i) * tileHeight / 2);
                 else if (j < i * 4)
-                    pos = new Vector3(- (j % i) * tileWidthSpacing, 0, -i * tileHeight + (j%i)*tileHeight/2);
+                    pos = new Vector3(-(j % i) * tileWidthSpacing, 0, -i * tileHeight + (j % i) * tileHeight / 2);
                 else if (j < i * 5)
-                    pos = new Vector3(-i * tileWidthSpacing, 0, -i * tileHeight/2 + (j%i)*tileHeight);
+                    pos = new Vector3(-i * tileWidthSpacing, 0, -i * tileHeight / 2 + (j % i) * tileHeight);
                 else
-                    pos = new Vector3(-i * tileWidthSpacing + (j%i) * tileWidthSpacing, 0, i * tileHeight/2 + (j%i)*tileHeight/2);
+                    pos = new Vector3(-i * tileWidthSpacing + (j % i) * tileWidthSpacing, 0, i * tileHeight / 2 + (j % i) * tileHeight / 2);
 
-                tiles[i][j] = new Tile(this.transform, modules[0], pos);
-        //Instantiate(modules[0], pos, Quaternion.identity, this.transform);
-    }
+                tiles[i][j] = new Tile(parent, modules[0], pos);
+                //Instantiate(modules[0], pos, Quaternion.identity, this.transform);
+            }
         }
     }
 
