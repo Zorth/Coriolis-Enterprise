@@ -5,7 +5,7 @@ using UnityEngine;
 public class CameraController : MonoBehaviour
 {
     public float slowSpeed, slowRotateSpeed, movementTime, fastMultiplier, minHeight, maxHeight, maxDepth, minDepth;
-    public Transform cameraTransform;
+    private Transform cameraTransform;
 
     private float cameraSpeed, cameraRotateSpeed, cameraTime, zoomLevel, newZoom;
     public GameObject worldGenerator;
@@ -17,15 +17,10 @@ public class CameraController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-<<<<<<< Updated upstream
         newPos = transform.position;
         newZoom = 0.5f;
         newRot = Quaternion.identity;
-    }
-=======
         cameraTransform = Camera.main.transform;
-        newPos = transform.position;
->>>>>>> Stashed changes
 
         worldSize = worldGenerator.GetComponent<WorldGenerator>().worldSize;
 
