@@ -31,6 +31,7 @@ sysinfo.txt
 *.pidb
 .DS_Store
 .vs/
+.vs
 .vsconfig
 
 ###
@@ -44,3 +45,6 @@ sysinfo.txt
 Icon?
 ehthumbs.db
 Thumbs.db
+
+
+# Other
