@@ -8,7 +8,8 @@ public class CameraController : MonoBehaviour
     private Transform cameraTransform;
 
     private float cameraSpeed, cameraRotateSpeed, cameraTime, zoomLevel, newZoom;
-
+    public GameObject worldGenerator;
+    private int worldSize;
 
     private Vector3 newPos;
     private Quaternion newRot;
@@ -20,32 +21,44 @@ public class CameraController : MonoBehaviour
         newZoom = 0.5f;
         newRot = Quaternion.identity;
         cameraTransform = Camera.main.transform;
-    }
 
+        worldSize = worldGenerator.GetComponent<WorldGenerator>().worldSize;
+
+        ResetZoomRot();
+    }
     // Update is called once per frame
     void Update()
     {
         HandleInput();
+
+        UpdateRenderDistance();
     }
 
     void HandleInput()
     {
-        float shiftMultiplier = ((fastMultiplier - 1f) * Input.GetAxis("Fast") + 1f);
+        float cameraSpeedMultiplier = ((fastMultiplier - 1f) * Input.GetAxis("Fast") + 1f) * (zoomLevel/2 + .5f);
 
-        handlePosition(shiftMultiplier);
-        handleRotation(shiftMultiplier);
-        handleZoom(shiftMultiplier);
+        handlePosition(cameraSpeedMultiplier);
+        handleRotation(cameraSpeedMultiplier);
+        handleZoom(cameraSpeedMultiplier);
 
         handleReset();
     }
 
     private void handleReset()
     {
-        if (Input.GetAxis("Reset") > 0.5f)
+        if (Input.GetButton("Reset"))
         {
-            Start();
+            ResetZoomRot();
         }
     }
+
+    private void ResetZoomRot()
+    {
+        newZoom = 0.5f;
+        newRot = Quaternion.identity;
+    }
+
 
     private void handleRotation(float shiftMultiplier)
     {
@@ -74,6 +87,11 @@ public class CameraController : MonoBehaviour
         newPos += transform.right * Input.GetAxis("Horizontal") * cameraSpeed;
 
         transform.position = Vector3.Lerp(transform.position, newPos, Time.deltaTime * cameraTime);
+
+    }
+
+    private void UpdateRenderDistance()
+    {
 
     }
 }
