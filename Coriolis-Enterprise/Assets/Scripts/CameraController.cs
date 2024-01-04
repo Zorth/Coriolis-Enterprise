@@ -9,7 +9,9 @@ public class CameraController : MonoBehaviour
 
     private float cameraSpeed, cameraRotateSpeed, cameraTime, zoomLevel, newZoom;
     public GameObject worldGenerator;
-    private int worldSize;
+    private float worldSize, worldRadius;
+    private float tileRadius;
+    private Dictionary<string, Vector3> offsets;
 
     private Vector3 newPos;
     private Quaternion newRot;
@@ -18,11 +20,12 @@ public class CameraController : MonoBehaviour
     void Start()
     {
         newPos = transform.position;
-        newZoom = 0.5f;
-        newRot = Quaternion.identity;
         cameraTransform = Camera.main.transform;
 
         worldSize = worldGenerator.GetComponent<WorldGenerator>().worldSize;
+        offsets = worldGenerator.GetComponent<WorldGenerator>().offsets;
+        tileRadius = WorldGenerator.tileRadius;
+        worldRadius = worldSize * tileRadius * 2;
 
         ResetZoomRot();
     }
@@ -30,6 +33,7 @@ public class CameraController : MonoBehaviour
     void Update()
     {
         HandleInput();
+        LoopTeleport();
 
         UpdateRenderDistance();
     }
@@ -38,14 +42,14 @@ public class CameraController : MonoBehaviour
     {
         float cameraSpeedMultiplier = ((fastMultiplier - 1f) * Input.GetAxis("Fast") + 1f) * (zoomLevel/2 + .5f);
 
-        handlePosition(cameraSpeedMultiplier);
-        handleRotation(cameraSpeedMultiplier);
-        handleZoom(cameraSpeedMultiplier);
+        HandlePosition(cameraSpeedMultiplier);
+        HandleRotation(cameraSpeedMultiplier);
+        HandleZoom(cameraSpeedMultiplier);
 
-        handleReset();
+        HandleReset();
     }
 
-    private void handleReset()
+    private void HandleReset()
     {
         if (Input.GetButton("Reset"))
         {
@@ -60,7 +64,7 @@ public class CameraController : MonoBehaviour
     }
 
 
-    private void handleRotation(float shiftMultiplier)
+    private void HandleRotation(float shiftMultiplier)
     {
         cameraRotateSpeed = slowRotateSpeed * shiftMultiplier;
 
@@ -69,7 +73,7 @@ public class CameraController : MonoBehaviour
         transform.rotation = Quaternion.Lerp(transform.rotation, newRot, Time.deltaTime * cameraRotateSpeed * 10f);
     }
 
-    private void handleZoom(float shiftMultiplier)
+    private void HandleZoom(float shiftMultiplier)
     {
         newZoom = Mathf.Clamp(newZoom - Input.GetAxis("Mouse ScrollWheel") * shiftMultiplier, 0f, 1f);
         zoomLevel = zoomLevel + (newZoom - zoomLevel) * Time.deltaTime * movementTime;
@@ -78,7 +82,7 @@ public class CameraController : MonoBehaviour
 
     }
 
-    private void handlePosition(float shiftMultiplier)
+    private void HandlePosition(float shiftMultiplier)
     {
         cameraSpeed = slowSpeed * shiftMultiplier;
         cameraTime = movementTime * shiftMultiplier;
@@ -88,6 +92,42 @@ public class CameraController : MonoBehaviour
 
         transform.position = Vector3.Lerp(transform.position, newPos, Time.deltaTime * cameraTime);
 
+    }
+
+    private void LoopTeleport()
+    {
+        while (transform.position.magnitude > ((worldRadius+1) * tileRadius))
+        {
+            Vector3 tpDist;
+            if (Vector3.SignedAngle(transform.position, Vector3.forward, Vector3.up) < -120f)
+            {
+                tpDist = offsets["SE"];
+            }
+            else if(Vector3.SignedAngle(transform.position, Vector3.forward, Vector3.up) < -60f)
+            {
+                tpDist = offsets["E"];
+            }
+            else if(Vector3.SignedAngle(transform.position, Vector3.forward, Vector3.up) < 0f)
+            {
+                tpDist = offsets["NE"];
+            }
+            else if(Vector3.SignedAngle(transform.position, Vector3.forward, Vector3.up) < 60f)
+            {
+                tpDist = offsets["NW"];
+            }
+            else if(Vector3.SignedAngle(transform.position, Vector3.forward, Vector3.up) < 120f)
+            {
+                tpDist = offsets["W"];
+            }
+            else
+            {
+                tpDist = offsets["SW"];
+            }
+
+            transform.position -= tpDist;
+            newPos -= tpDist;
+
+        }
     }
 
     private void UpdateRenderDistance()
